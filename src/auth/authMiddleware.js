@@ -2,10 +2,12 @@ const { validateToken } = require("./authorization");
 
 const checkForAuthenticationCookie = (cookieName) => {
   return (req, res, next) => {
-    const token = req.cookie[cookieName];
+   
+     const token = req.cookies[cookieName];
 
     if (!token) {
       return next();
+      
     }
     try {
       req.user = validateToken(token);

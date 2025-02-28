@@ -4,7 +4,10 @@ const express = require("express");
 const bodyParser = require('body-parser');
 const authRouter = require("./routes/userAuth");
 const connectToDB = require("./config/database");
-const cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser');
+const checkForAuthenticationCookie = require('./auth/authMiddleware');
+const profileRouter = require('./routes/profile');
+const taskRouter = require('./routes/task');
 
 
 const app = express();
@@ -14,6 +17,8 @@ app.use(cookieParser());
 
 
 app.use("/",authRouter);
+app.use("/",checkForAuthenticationCookie("token"),profileRouter);
+app.use('/',checkForAuthenticationCookie("token"),taskRouter);
 
 
 
