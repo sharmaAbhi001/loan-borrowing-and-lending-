@@ -120,10 +120,13 @@ const userOTPVerificationHandel = async(req,res)=>{
         const existingOTP = await User.findOne({emailId,verifyCode:OTP});
 
         if(existingOTP){
-            existingOTP.isVerified = true;
-            await existingOTP.save();
+            const updatedUser = await User.findOneAndUpdate(
+                { emailId: emailId }, 
+                { $set: { isVerified: true } }, 
+                { new: true }
+            );
 
-             const token = createToken(existingOTP);
+             const token = createToken(updatedUser);
              res.cookie("token",token)
             return res.status(200).json({message:"User verification successfull"});
         }
